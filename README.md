@@ -60,7 +60,18 @@ DB_NAME=your_database_name
 REACT_APP_BACKEND_URL=http://localhost:8000
 ```
 
-## 🚀 Deployment
+## 🚀 One-Click Deployment
+
+### Deploy Backend to Railway
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/zUcpux?referralCode=alphasec)
+
+### Deploy Frontend to Vercel
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Mahmadhayat/newapp-main&project-name=newapp-frontend&repository-name=newapp-frontend&root-directory=frontend)
+
+### Deploy Frontend to Netlify
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Mahmadhayat/newapp-main)
+
+## 🚀 Manual Deployment
 
 This application can be deployed on various platforms:
 
