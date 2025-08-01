@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "projectId": 3,
+    "messages": [
+      {
+        "id": 1,
+        "sender": "client",
+        "senderName": "Tech Startup Inc",
+        "message": "Hi John, I reviewed your proposal for the email automation system. Can you provide more details about the CRM integration?",
+        "timestamp": "2025-01-10T10:30:00Z"
+      },
+      {
+        "id": 2,
+        "sender": "seller",
+        "senderName": "John Developer",
+        "message": "Absolutely! I can integrate with HubSpot, Salesforce, or Pipedrive. The system will sync contact data and track email engagement automatically. Would you like me to prepare a detailed technical proposal?",
+        "timestamp": "2025-01-10T11:15:00Z"
+      },
+      {
+        "id": 3,
+        "sender": "client",
+        "senderName": "Tech Startup Inc",
+        "message": "That sounds perfect. We use HubSpot. Please send the detailed proposal and we can move forward.",
+        "timestamp": "2025-01-10T14:22:00Z"
+      },
+      {
+        "id": 4,
+        "sender": "seller",
+        "senderName": "John Developer",
+        "message": "Great! I'll send you a comprehensive proposal by tomorrow with timeline, deliverables, and HubSpot integration details. Looking forward to working with you!",
+        "timestamp": "2025-01-10T15:45:00Z"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "projectId": 1,
+    "messages": [
+      {
+        "id": 1,
+        "sender": "client",
+        "senderName": "Sarah Chen",
+        "message": "Hello! I'm interested in getting started with the inventory automation. Do you have experience with Shopify API?",
+        "timestamp": "2025-01-09T09:15:00Z"
+      },
+      {
+        "id": 2,
+        "sender": "seller",
+        "senderName": "Automation Specialist",
+        "message": "Hi Sarah! Yes, I have extensive experience with Shopify API and QuickBooks integration. I've built similar systems for 3 other e-commerce clients. When would be a good time to discuss your specific requirements?",
+        "timestamp": "2025-01-09T12:30:00Z"
+      }
+    ]
+  }
+]

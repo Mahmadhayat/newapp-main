@@ -1,0 +1,96 @@
+[
+  {
+    "id": 1,
+    "title": "E-commerce Inventory Management Automation",
+    "description": "Need a system to automatically track inventory levels, send low-stock alerts, and generate purchase orders. Should integrate with Shopify and QuickBooks. Must handle 500+ products with real-time updates.",
+    "budget": "$500+",
+    "deliveryTime": 14,
+    "clientName": "Sarah Chen",
+    "postedDate": "2025-01-10",
+    "status": "open",
+    "category": "Business Automation",
+    "skills": ["Python", "API Integration", "Database Management"],
+    "offers": []
+  },
+  {
+    "id": 2,
+    "title": "Social Media Content Scheduling Bot",
+    "description": "Looking for automation to schedule posts across Instagram, Twitter, and LinkedIn. Need content calendar integration, hashtag suggestions, and performance analytics. Should support bulk upload and team collaboration.",
+    "budget": "$100-500",
+    "deliveryTime": 7,
+    "clientName": "Marketing Pro Agency",
+    "postedDate": "2025-01-09",
+    "status": "open",
+    "category": "Marketing Automation",
+    "skills": ["Social Media APIs", "JavaScript", "Automation Tools"],
+    "offers": []
+  },
+  {
+    "id": 3,
+    "title": "Email Campaign Automation System",
+    "description": "Create automated email sequences for lead nurturing. Need segmentation based on user behavior, A/B testing capabilities, and detailed analytics. Integration with CRM required.",
+    "budget": "$500+",
+    "deliveryTime": 21,
+    "clientName": "Tech Startup Inc",
+    "postedDate": "2025-01-08",
+    "status": "in_progress",
+    "category": "Marketing Automation",
+    "skills": ["Email Marketing", "CRM Integration", "Analytics"],
+    "offers": [
+      {
+        "sellerId": 1,
+        "sellerName": "John Developer",
+        "price": 750,
+        "deliveryTime": 18,
+        "message": "I have 5+ years experience in email automation systems. Can deliver a complete solution with Mailchimp integration."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Data Entry Automation from PDFs",
+    "description": "Need to extract data from 1000+ PDF invoices and automatically enter into Excel spreadsheets. Require OCR capabilities and data validation. Weekly processing of new batches.",
+    "budget": "$100-500",
+    "deliveryTime": 10,
+    "clientName": "Finance Solutions LLC",
+    "postedDate": "2025-01-07",
+    "status": "open",
+    "category": "Data Processing",
+    "skills": ["OCR", "Python", "Excel Automation"],
+    "offers": []
+  },
+  {
+    "id": 5,
+    "title": "Customer Support Chatbot Integration",
+    "description": "Implement AI chatbot for 24/7 customer support on website. Need natural language processing, knowledge base integration, and seamless handoff to human agents.",
+    "budget": "$500+",
+    "deliveryTime": 30,
+    "clientName": "RetailHub",
+    "postedDate": "2025-01-06",
+    "status": "open",
+    "category": "AI Automation",
+    "skills": ["AI/ML", "Chatbot Development", "NLP"],
+    "offers": []
+  },
+  {
+    "id": 6,
+    "title": "Automated Report Generation",
+    "description": "Create system to automatically generate weekly sales reports from multiple data sources. Need data visualization, scheduled delivery via email, and customizable templates.",
+    "budget": "< $100",
+    "deliveryTime": 5,
+    "clientName": "Small Business Owner",
+    "postedDate": "2025-01-05",
+    "status": "completed",
+    "category": "Business Automation",
+    "skills": ["Data Visualization", "Report Automation", "Email Integration"],
+    "offers": [
+      {
+        "sellerId": 2,
+        "sellerName": "Analytics Expert",
+        "price": 85,
+        "deliveryTime": 4,
+        "message": "Perfect fit for my expertise. I can create automated reports with beautiful charts and scheduled delivery."
+      }
+    ]
+  }
+]
