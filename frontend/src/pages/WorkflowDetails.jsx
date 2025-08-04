@@ -16,7 +16,8 @@ import {
   Play,
   Settings,
   Users,
-  TrendingUp
+  TrendingUp,
+  FileText
 } from 'lucide-react';
 import sampleWorkflows from '../data/sampleWorkflows.json';
 
@@ -299,6 +300,17 @@ const WorkflowDetails = () => {
                   >
                     Preview Workflow
                   </Button>
+                  <Button 
+                    asChild
+                    variant="outline" 
+                    size="lg"
+                    className="w-full border-orange-300 text-orange-700 hover:bg-orange-50"
+                  >
+                    <Link to={`/workflow/${workflow.id}/request-changes`}>
+                      <FileText className="h-4 w-4 mr-2" />
+                      Request Changes
+                    </Link>
+                  </Button>
                 </div>
                 <div className="mt-4 text-center">
                   <p className="text-xs text-slate-500">
@@ -318,7 +330,7 @@ const WorkflowDetails = () => {
                   Get support with setup and customization.
                 </p>
                 <Button asChild variant="outline" size="sm" className="w-full">
-                  <Link to="/custom-request">
+                  <Link to={`/workflow/${workflow.id}/request-changes`}>
                     Request Custom Modification
                   </Link>
                 </Button>

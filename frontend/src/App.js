@@ -10,6 +10,11 @@ import WorkflowList from './pages/WorkflowList';
 import WorkflowDetails from './pages/WorkflowDetails';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import WorkflowModificationRequest from './components/WorkflowModificationRequest';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import UserDashboard from './pages/UserDashboard';
+import UserProtectedRoute from './components/UserProtectedRoute';
 
 function App() {
   return (
@@ -39,6 +44,17 @@ function App() {
                     <Route path="/custom-request" element={<CustomRequest />} />
                     <Route path="/workflows" element={<WorkflowList />} />
                     <Route path="/workflow/:id" element={<WorkflowDetails />} />
+                    <Route path="/workflow/:id/request-changes" element={<WorkflowModificationRequest />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route 
+                      path="/dashboard" 
+                      element={
+                        <UserProtectedRoute>
+                          <UserDashboard />
+                        </UserProtectedRoute>
+                      } 
+                    />
                   </Routes>
                 </main>
                 <Footer />

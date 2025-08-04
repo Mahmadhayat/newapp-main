@@ -8,7 +8,8 @@ import {
   Zap, 
   Star,
   ArrowRight,
-  CheckCircle
+  CheckCircle,
+  FileText
 } from 'lucide-react';
 
 const WorkflowCard = ({ workflow }) => {
@@ -115,23 +116,36 @@ const WorkflowCard = ({ workflow }) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex space-x-2 pt-2">
+          <div className="space-y-2 pt-2">
+            <div className="flex space-x-2">
+              <Button 
+                asChild 
+                size="sm" 
+                className="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-xs"
+              >
+                <Link to={`/workflow/${workflow.id}`}>
+                  View Details
+                  <ArrowRight className="ml-1 h-3 w-3" />
+                </Link>
+              </Button>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="text-xs border-slate-300 hover:bg-slate-50"
+              >
+                Deploy Now
+              </Button>
+            </div>
             <Button 
               asChild 
               size="sm" 
-              className="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-xs"
-            >
-              <Link to={`/workflow/${workflow.id}`}>
-                View Details
-                <ArrowRight className="ml-1 h-3 w-3" />
-              </Link>
-            </Button>
-            <Button 
-              size="sm" 
               variant="outline" 
-              className="text-xs border-slate-300 hover:bg-slate-50"
+              className="w-full text-xs border-orange-300 text-orange-700 hover:bg-orange-50"
             >
-              Deploy Now
+              <Link to={`/workflow/${workflow.id}/request-changes`}>
+                <FileText className="mr-1 h-3 w-3" />
+                Request Changes
+              </Link>
             </Button>
           </div>
         </div>

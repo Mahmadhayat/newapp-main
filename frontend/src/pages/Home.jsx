@@ -18,11 +18,23 @@ import {
   X,
   Play,
   Pause,
-  RotateCcw
+  RotateCcw,
+  Calculator,
+  Plug,
+  MessageCircle,
+  Settings,
+  Activity
 } from 'lucide-react';
 
+// Import interactive components
+import WorkflowBuilder from '../components/WorkflowBuilder';
+import LiveChatWidget from '../components/LiveChatWidget';
+import ROICalculator from '../components/ROICalculator';
+import IntegrationChecker from '../components/IntegrationChecker';
+import WorkflowSimulator from '../components/WorkflowSimulator';
+
 const Home = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(2); // Start at position 2 (first real slide)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
@@ -99,30 +111,55 @@ const Home = () => {
     }
   ];
 
+  // Create extended workflows array for infinite loop
+  const extendedWorkflows = [
+    ...workflows.slice(-2), // Last 2 slides at the beginning
+    ...workflows,           // Original slides
+    ...workflows.slice(0, 2) // First 2 slides at the end
+  ];
+
   // Auto-play functionality
   useEffect(() => {
     if (!isAutoPlaying) return;
     
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % workflows.length);
+      setCurrentSlide((prev) => prev + 1);
     }, 4000); // Auto-advance every 4 seconds
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying, workflows.length]);
+  }, [isAutoPlaying]);
+
+  // Handle infinite loop transitions
+  useEffect(() => {
+    const maxIndex = workflows.length + 1; // +2 for cloned slides at end, -1 for 0-based index
+    const minIndex = 2; // Starting position (after cloned slides at beginning)
+
+    if (currentSlide > maxIndex) {
+      // Reset to beginning (after cloned slides)
+      setTimeout(() => {
+        setCurrentSlide(2);
+      }, 500); // Wait for transition to complete
+    } else if (currentSlide < minIndex && currentSlide !== 2) {
+      // Reset to end (before cloned slides)
+      setTimeout(() => {
+        setCurrentSlide(workflows.length + 1);
+      }, 500); // Wait for transition to complete
+    }
+  }, [currentSlide, workflows.length]);
 
   const nextSlide = () => {
     setIsAutoPlaying(false); // Stop auto-play when user interacts
-    setCurrentSlide((prev) => (prev + 1) % workflows.length);
+    setCurrentSlide((prev) => prev + 1);
   };
 
   const prevSlide = () => {
     setIsAutoPlaying(false); // Stop auto-play when user interacts
-    setCurrentSlide((prev) => (prev - 1 + workflows.length) % workflows.length);
+    setCurrentSlide((prev) => prev - 1);
   };
 
   const goToSlide = (index) => {
     setIsAutoPlaying(false); // Stop auto-play when user interacts
-    setCurrentSlide(index);
+    setCurrentSlide(index + 2); // +2 to account for cloned slides at beginning
   };
 
   // Demo data for different workflow types
@@ -364,8 +401,8 @@ const Home = () => {
                   transform: `translateX(-${currentSlide * (isMobile ? 100 : isTablet ? 50 : 100/3)}%)` 
                 }}
               >
-                {workflows.map((workflow) => (
-                  <div key={workflow.id} className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-1 md:px-4">
+                {extendedWorkflows.map((workflow, index) => (
+                  <div key={`${workflow.id}-${index}`} className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-1 md:px-4">
                     <div className={`bg-gradient-to-br ${workflow.gradient} rounded-xl md:rounded-2xl p-5 md:p-6 lg:p-8 border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 h-full mx-2 md:mx-0`}>
                       <div className="flex items-start space-x-3 md:space-x-4 mb-4 md:mb-6">
                         <div className={`${workflow.iconBg} p-2 md:p-3 rounded-lg md:rounded-xl shadow-sm flex-shrink-0`}>
@@ -397,18 +434,24 @@ const Home = () => {
 
             {/* Slide Indicators */}
             <div className="flex justify-center mt-8 space-x-3">
-              {workflows.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-4 h-4 rounded-full transition-all duration-200 ${
-                    index === currentSlide 
-                      ? 'bg-teal-600 shadow-lg' 
-                      : 'bg-slate-300 hover:bg-slate-400 hover:scale-110'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
+              {workflows.map((_, index) => {
+                // Calculate the active indicator based on current slide position
+                const isActive = (currentSlide - 2) % workflows.length === index || 
+                                (currentSlide === index + 2);
+                
+                return (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`w-4 h-4 rounded-full transition-all duration-200 ${
+                      isActive
+                        ? 'bg-teal-600 shadow-lg' 
+                        : 'bg-slate-300 hover:bg-slate-400 hover:scale-110'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>

@@ -1,14 +1,33 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
-import { Menu, X, Zap, Search } from 'lucide-react';
+import { Menu, X, Zap, Search, User, LogOut, Settings } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in
+    const userData = localStorage.getItem('userAuth');
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, [location]);
 
   const isActive = (path) => {
     return location.pathname === path;
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('userAuth');
+    localStorage.removeItem('userToken');
+    setUser(null);
+    setShowUserMenu(false);
+    navigate('/');
   };
 
   const navLinks = [
@@ -46,27 +65,72 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Search & CTA Section */}
+          {/* Search & User Section */}
           <div className="hidden md:flex items-center space-x-4">
             {/* Search Icon */}
             <button
               className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
               aria-label="Search workflows"
               onClick={() => {
-                // You can implement search functionality here
-                // For now, redirect to workflows page
                 window.location.href = '/workflows';
               }}
             >
               <Search className="h-5 w-5" />
             </button>
             
-            <Button 
-              asChild
-              className="bg-teal-600 hover:bg-teal-700 text-white"
-            >
-              <Link to="/custom-request">Get Started</Link>
-            </Button>
+            {/* User Authentication */}
+            {user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center space-x-2 p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-colors"
+                >
+                  <div className="bg-teal-100 p-1 rounded-full">
+                    <User className="h-4 w-4 text-teal-600" />
+                  </div>
+                  <span className="text-sm font-medium">{user.name}</span>
+                </button>
+                
+                {/* User Dropdown Menu */}
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-50">
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      <User className="h-4 w-4 mr-2" />
+                      Dashboard
+                    </Link>
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      <Settings className="h-4 w-4 mr-2" />
+                      Settings
+                    </Link>
+                    <hr className="my-1" />
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center w-full px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Button asChild variant="ghost">
+                  <Link to="/login">Sign In</Link>
+                </Button>
+                <Button asChild className="bg-teal-600 hover:bg-teal-700 text-white">
+                  <Link to="/signup">Get Started</Link>
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -112,16 +176,58 @@ const Header = () => {
                 <span className="text-sm font-medium">Search Workflows</span>
               </button>
               
-              <div className="px-4 pt-2">
-                <Button 
-                  asChild
-                  className="w-full bg-teal-600 hover:bg-teal-700 text-white"
-                >
-                  <Link to="/custom-request" onClick={() => setIsMenuOpen(false)}>
-                    Get Started
-                  </Link>
-                </Button>
-              </div>
+              {/* Mobile User Authentication */}
+              {user ? (
+                <div className="px-4 pt-2 space-y-2">
+                  <div className="flex items-center space-x-2 px-4 py-2 bg-slate-50 rounded-md">
+                    <div className="bg-teal-100 p-1 rounded-full">
+                      <User className="h-4 w-4 text-teal-600" />
+                    </div>
+                    <span className="text-sm font-medium text-slate-900">{user.name}</span>
+                  </div>
+                  <Button 
+                    asChild
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                      <User className="h-4 w-4 mr-2" />
+                      Dashboard
+                    </Link>
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <div className="px-4 pt-2 space-y-2">
+                  <Button 
+                    asChild
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                      Sign In
+                    </Link>
+                  </Button>
+                  <Button 
+                    asChild
+                    className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                  >
+                    <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
+                      Get Started
+                    </Link>
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         )}

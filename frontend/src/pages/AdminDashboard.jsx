@@ -39,6 +39,7 @@ const AdminDashboard = () => {
   const { toast } = useToast();
   const [workflows, setWorkflows] = useState([]);
   const [customRequests, setCustomRequests] = useState([]);
+  const [modificationRequests, setModificationRequests] = useState([]);
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
@@ -82,6 +83,10 @@ const AdminDashboard = () => {
       }
     ];
     setCustomRequests(mockRequests);
+
+    // Load modification requests from localStorage
+    const storedModificationRequests = JSON.parse(localStorage.getItem('modificationRequests') || '[]');
+    setModificationRequests(storedModificationRequests);
 
     // Simulate all projects (workflows + custom requests combined)
     const mockProjects = [
@@ -424,7 +429,7 @@ const AdminDashboard = () => {
 
           {/* Main Content */}
           <Tabs defaultValue="projects" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 lg:w-[600px]">
+            <TabsList className="grid w-full grid-cols-4 lg:w-[800px]">
               <TabsTrigger value="projects" className="flex items-center space-x-2">
                 <Target className="h-4 w-4" />
                 <span>All Projects</span>
@@ -436,6 +441,10 @@ const AdminDashboard = () => {
               <TabsTrigger value="requests" className="flex items-center space-x-2">
                 <FileText className="h-4 w-4" />
                 <span>Custom Requests</span>
+              </TabsTrigger>
+              <TabsTrigger value="modifications" className="flex items-center space-x-2">
+                <Edit className="h-4 w-4" />
+                <span>Modifications</span>
               </TabsTrigger>
             </TabsList>
 
@@ -827,6 +836,152 @@ const AdminDashboard = () => {
                       <p className="text-slate-600 mb-4">Custom workflow requests will appear here when clients submit them</p>
                       <Button asChild className="bg-teal-600 hover:bg-teal-700 text-white">
                         <Link to="/workflows">Manage Workflows</Link>
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Modification Requests Tab */}
+            <TabsContent value="modifications">
+              <Card className="shadow-sm border-0">
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <span>Workflow Modification Requests</span>
+                    <Badge variant="secondary">{modificationRequests.length} requests</Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {modificationRequests.length > 0 ? (
+                    <div className="space-y-4">
+                      {modificationRequests.map((request) => (
+                        <div key={request.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2 mb-2">
+                                <h3 className="font-semibold text-slate-900">
+                                  {request.workflowTitle} - Modification Request
+                                </h3>
+                                <Badge 
+                                  variant="outline" 
+                                  className={`${getStatusColor(request.status)} flex items-center space-x-1`}
+                                >
+                                  {getStatusIcon(request.status)}
+                                  <span>{formatStatus(request.status)}</span>
+                                </Badge>
+                              </div>
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                                <div>
+                                  <p className="text-sm text-slate-600 mb-1">
+                                    <strong>Client:</strong> {request.clientName}
+                                  </p>
+                                  <p className="text-sm text-slate-600 mb-1">
+                                    <strong>Email:</strong> {request.clientEmail}
+                                  </p>
+                                  <p className="text-sm text-slate-600 mb-1">
+                                    <strong>Budget:</strong> {request.budget || 'Not specified'}
+                                  </p>
+                                </div>
+                                <div>
+                                  <p className="text-sm text-slate-600 mb-1">
+                                    <strong>Urgency:</strong> {request.urgency}
+                                  </p>
+                                  <p className="text-sm text-slate-600 mb-1">
+                                    <strong>Submitted:</strong> {new Date(request.submittedAt).toLocaleDateString()}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div className="mb-3">
+                                <p className="text-sm font-medium text-slate-700 mb-1">Requested Changes:</p>
+                                <p className="text-sm text-slate-600 bg-slate-50 p-2 rounded">
+                                  {request.modifications}
+                                </p>
+                              </div>
+                              
+                              {request.additionalNotes && (
+                                <div className="mb-3">
+                                  <p className="text-sm font-medium text-slate-700 mb-1">Additional Notes:</p>
+                                  <p className="text-sm text-slate-600 bg-slate-50 p-2 rounded">
+                                    {request.additionalNotes}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                            
+                            <div className="flex flex-col space-y-2 ml-4">
+                              <div className="flex space-x-2">
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  onClick={() => {
+                                    const newStatus = prompt('Update status (pending/in_progress/completed):', request.status);
+                                    if (newStatus && ['pending', 'in_progress', 'completed'].includes(newStatus)) {
+                                      const updatedRequests = modificationRequests.map(r => 
+                                        r.id === request.id ? { ...r, status: newStatus } : r
+                                      );
+                                      setModificationRequests(updatedRequests);
+                                      localStorage.setItem('modificationRequests', JSON.stringify(updatedRequests));
+                                      toast({
+                                        title: "Status Updated",
+                                        description: `Request status changed to ${formatStatus(newStatus)}.`,
+                                        className: "bg-blue-50 border-blue-200 text-blue-800"
+                                      });
+                                    }
+                                  }}
+                                >
+                                  <Edit className="h-4 w-4 mr-1" />
+                                  Update Status
+                                </Button>
+                              </div>
+                              
+                              <div className="flex space-x-2">
+                                <Button 
+                                  asChild 
+                                  size="sm" 
+                                  variant="ghost"
+                                >
+                                  <Link to={`/workflow/${request.workflowId}`}>
+                                    <Eye className="h-4 w-4 mr-1" />
+                                    View Workflow
+                                  </Link>
+                                </Button>
+                                
+                                <Button 
+                                  size="sm" 
+                                  variant="ghost"
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                  onClick={() => {
+                                    if (window.confirm('Are you sure you want to delete this modification request?')) {
+                                      const updatedRequests = modificationRequests.filter(r => r.id !== request.id);
+                                      setModificationRequests(updatedRequests);
+                                      localStorage.setItem('modificationRequests', JSON.stringify(updatedRequests));
+                                      toast({
+                                        title: "Request Deleted",
+                                        description: "The modification request has been removed.",
+                                        className: "bg-red-50 border-red-200 text-red-800"
+                                      });
+                                    }
+                                  }}
+                                >
+                                  <Trash2 className="h-4 w-4 mr-1" />
+                                  Delete
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <Edit className="h-12 w-12 mx-auto mb-4 text-slate-400" />
+                      <p className="text-lg font-medium text-slate-900 mb-2">No modification requests yet</p>
+                      <p className="text-slate-600 mb-4">Workflow modification requests will appear here when users request changes to existing workflows</p>
+                      <Button asChild variant="outline">
+                        <Link to="/workflows">View Workflows</Link>
                       </Button>
                     </div>
                   )}
